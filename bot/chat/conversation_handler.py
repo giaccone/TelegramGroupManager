@@ -11,18 +11,19 @@ logger = logging.getLogger(__name__)
 
 # leave group if not allowed
 async def check_group(update, context):
-    if (update.message.chat_id < 1 )  and (update.message.chat_id not in allowed_group):
-        
-        # log message
-        log_message="action: leave chat - chat: {}" \
-            " - chat_id: {}".format(update.message.chat.title,
-                                    update.message.chat_id)
-        
-        # leave chat
-        await context.bot.leaveChat(update.message.chat_id)
+    if update.message is not None:
+        if (update.message.chat_id < 1 )  and (update.message.chat_id not in allowed_group):
+            
+            # log message
+            log_message="action: leave chat - chat: {}" \
+                " - chat_id: {}".format(update.message.chat.title,
+                                        update.message.chat_id)
+            
+            # leave chat
+            await context.bot.leaveChat(update.message.chat_id)
 
-        # log action
-        logger.warning(log_message)
+            # log action
+            logger.warning(log_message)
 
 # check market-related words
 async def market_words(update, context):
