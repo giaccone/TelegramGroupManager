@@ -28,7 +28,7 @@ async def check_group(update, context):
 # check market-related words
 async def market_words(update, context):
     # restrict to real messages (not None)
-    if update.message.text is not None:
+    if update.message is not None:
         words = ["-vendo-", "-vende-", "-vendi-", "-vendere-"]
         for w in words:
             text_message = "-" + str(update.message.text).lower().replace("\n", " ").replace(" ", "-").replace("?", "") + "-"
