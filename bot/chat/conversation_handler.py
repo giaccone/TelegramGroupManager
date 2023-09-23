@@ -2,7 +2,7 @@ from telegram.constants import ParseMode
 from telegram import ChatPermissions
 from telegram.error import Forbidden
 from configparser import ConfigParser
-from config import allowed_group
+from config import allowed_group, group
 import logging
 
 # setup logger
@@ -133,8 +133,32 @@ async def slowmode_check(update, context):
                 context.user_data['last_msg_id'] = update.message.message_id
 
 
+async def admin_tag(update, context):
+    """
+    This rule, allow to notify the admins in their private group
+    """
+
+    # restrict to real messages (not None) and groups (chat_id < 1)
+    if (update.message is not None) and (update.message.chat_id < 1):
+        if "@admin" in update.message.text.lower():
+            # message for user
+            msg = "Grazie della segnalazione, ho avvisato gli admin del gruppo."
+            await update.message.reply_text(text=msg)
+
+            # message for admins
+            msg = "Qualcuna/o ha richiesto la vostra attenzione qui:\n\n"
+            msg += f"Gruppo: {update.message.chat.title}\n"
+            msg += f"link: {update.message.link}"
+
+            notification_message = await context.bot.send_message(chat_id=group['admin']['id'], text=msg)
+            await context.bot.pin_chat_message(chat_id=group['admin']['id'],
+                                         message_id=notification_message.message_id,
+                                         disable_notification=False)
+
+
 # trigger all functions defined above
 async def init(update, context):
     await check_group(update, context)
     await slowmode_check(update, context)
     await market_words(update, context)
+    await admin_tag(update, context)
