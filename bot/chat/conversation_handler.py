@@ -78,7 +78,7 @@ async def slowmode_check(update, context):
         # check if slow mode is active
         if active and (update.message.from_user.id not in context.chat_data['admins']):
             # check if the user has already an active counter for consecutive messages
-            if 'slow_counter' in context.user_data:
+            if ('slow_counter' in context.user_data) and (update.message.message_thread_id == context.user_data['thread']):
                 # check continuity
                 delta = update.message.message_id - context.user_data['last_msg_id']
                 if delta == 1:  # if new message is consecutive
@@ -117,18 +117,22 @@ async def slowmode_check(update, context):
                         context.job_queue.run_once(delayed_unmute, int(slowmode_cnf[str(update.message.chat_id)]['seconds']))
 
                         # clean counters for this user
+                        del context.user_data['thread']
                         del context.user_data['slow_counter']
                         del context.user_data['last_msg_id']
 
                     else:  # increase counter and update last_msg_id
+                        context.user_data['thread'] = update.message.message_thread_id
                         context.user_data['slow_counter'] += 1
                         context.user_data['last_msg_id'] = update.message.message_id
 
                 else:  # message is not consecutive, reset counters
+                    context.user_data['thread'] = update.message.message_thread_id
                     context.user_data['slow_counter'] = 1
                     context.user_data['last_msg_id'] = update.message.message_id
 
             else:  # first message by the user, initialize counters
+                context.user_data['thread'] = update.message.message_thread_id
                 context.user_data['slow_counter'] = 1
                 context.user_data['last_msg_id'] = update.message.message_id
 
