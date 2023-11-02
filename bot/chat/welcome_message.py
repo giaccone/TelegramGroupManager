@@ -92,7 +92,7 @@ async def func(update, context):
                                         text=welcome_text.format(member_name, update.chat_member.chat.title),
                                         reply_markup=reply_markup, parse_mode=ParseMode.HTML)
         
-        elif update.chat_member.chat.id == config.group['modding']['id']:
+        elif (update.chat_member.chat.id == config.group['modding']['id']) or (update.chat_member.chat.id == config.group['watch']['id']):
 
             keyboard = [
                 [InlineKeyboardButton("Google Pixel Italia", url='https://t.me/googlepixelit')],
