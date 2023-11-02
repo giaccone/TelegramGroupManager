@@ -51,6 +51,7 @@ async def func(update, context):
     # member_name = update.chat_member.new_chat_member.user.mention_html()
     # welcome text
     welcome_text = "Benvenuto {} in <b>{}</b>!\n\nTi preghiamo di rispettare le regole per non ricevere sanzioni e ti invitiamo anche a visitare gli altri gruppi del nostro network!"
+    welcome_inactive = "Benvenuto {}!\nQuesto gruppo è stato disattivato. Questi sono i nostri gruppi attivi.\n Se stai cercando il mercatino. Adesso è integrato nel gruppo Google Pixel Italia (link qui sotto)."
     
     # hndle new user
     if not was_member and is_member:
@@ -91,6 +92,18 @@ async def func(update, context):
                                         text=welcome_text.format(member_name, update.chat_member.chat.title),
                                         reply_markup=reply_markup, parse_mode=ParseMode.HTML)
         
+        elif update.chat_member.chat.id == config.group['modding']['id']:
+
+            keyboard = [
+                [InlineKeyboardButton("Google Pixel Italia", url='https://t.me/googlepixelit')],
+                [InlineKeyboardButton("macOS Italia", url='https://t.me/macOSItalia')],
+                [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+
+            await context.bot.send_message(chat_id=update.chat_member.chat.id,
+                                           text=welcome_inactive.format(member_name),
+                                           reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+
         else:
             
             keyboard = [
