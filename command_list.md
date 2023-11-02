@@ -13,7 +13,6 @@
 | `/unmute`                        | answering to the user message            |
 | `/pin`                           | answering to the message to be pinned    |
 | `/slow flag n_mex seconds`       | read footnote [1]                        |
-| `/cmd_list`                      |                                          |
 | `/log`                           |                                          |
 
 

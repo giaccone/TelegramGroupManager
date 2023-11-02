@@ -7,7 +7,6 @@ def admin_command(application):
     application.add_handler(CommandHandler("autoban", command.admin.autoban.func))
     application.add_handler(CommandHandler("autokick", command.admin.autokick.func))
     application.add_handler(CommandHandler("ban", command.admin.ban.func))
-    application.add_handler(CommandHandler("cmd_list", command.admin.cmd_list.func))
     application.add_handler(CommandHandler("kick", command.admin.kick.func))
     application.add_handler(CommandHandler("log", command.admin.log.func))
     application.add_handler(CommandHandler("mute", command.admin.mute.func))
