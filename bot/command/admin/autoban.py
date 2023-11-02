@@ -34,7 +34,7 @@ async def func(update, context):
                 " - Name: {}" \
                 " - Username: @{}" \
                 " - Performed by admin: @{}" \
-                " - Ban reason: {}".format(update.message.chat.title,
+                " - ban reason: {}".format(update.message.chat.title,
                                                      update.message.chat_id,
                                                      update.message.reply_to_message.from_user.id,
                                                      update.message.reply_to_message.from_user.first_name,
