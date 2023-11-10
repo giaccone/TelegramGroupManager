@@ -78,7 +78,7 @@ async def func(update, context):
                     [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
-                await context.bot.send_message(chat_id=update.chat_member.chat.id,
+                await context.bot.send_message(chat_id=query.message.chat.id,
                                             text=welcome_inactive.format(member_name),
                                             reply_markup=reply_markup, parse_mode=ParseMode.HTML)
 
