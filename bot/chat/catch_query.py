@@ -42,7 +42,7 @@ async def func(update, context):
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
                 await context.bot.send_message(chat_id=config.group['pixel']['id'],
-                                            text=welcome_text.format(member_name, update.chat_member.chat.title),
+                                            text=welcome_text.format(member_name, query.message.chat.title),
                                             message_thread_id=config.group['pixel']['main_topic'],
                                             reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
@@ -55,7 +55,7 @@ async def func(update, context):
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
                 await context.bot.send_message(chat_id=config.group['macos']['id'],
-                                                text=welcome_text.format(member_name, update.chat_member.chat.title),
+                                                text=welcome_text.format(member_name, query.message.chat.title),
                                                 reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
             elif query.message.chat.id == config.group['foss']['id']:
@@ -67,7 +67,7 @@ async def func(update, context):
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
                 await context.bot.send_message(chat_id=config.group['foss']['id'],
-                                            text=welcome_text.format(member_name, update.chat_member.chat.title),
+                                            text=welcome_text.format(member_name, query.message.chat.title),
                                             reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
             elif (query.message.chat.id == config.group['modding']['id']) or (query.message.chat.id == config.group['watch']['id']):
