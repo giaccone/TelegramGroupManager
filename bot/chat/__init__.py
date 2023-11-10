@@ -1,4 +1,4 @@
-__all__ = ["conversation_handler", "welcome_message"]
+__all__ = ["catch_query", "conversation_handler", "captcha"]
 
-from . import conversation_handler, welcome_message
+from . import catch_query, conversation_handler, captcha
 from chat import *

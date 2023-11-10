@@ -1,6 +1,6 @@
 # PTB modules
 from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler
+from telegram.ext import ApplicationBuilder, MessageHandler, CallbackQueryHandler
 from telegram.ext import ChatMemberHandler
 from telegram.ext import filters
 # import token
@@ -32,13 +32,16 @@ def main():
     application = ApplicationBuilder().token(TOKEN).build()
 
     # Handle members joining/leaving chats
-    application.add_handler(ChatMemberHandler(chat.welcome_message.func, ChatMemberHandler.CHAT_MEMBER))
+    application.add_handler(ChatMemberHandler(chat.captcha.func, ChatMemberHandler.CHAT_MEMBER))
 
     # Admin commands
     command_handler.admin_command(application)
 
     # User commands
     command_handler.user_command(application)
+
+    # query reaction for inline buttons
+    application.add_handler(CallbackQueryHandler(chat.catch_query.func))
 
     # check message text and react accordingly
     application.add_handler(MessageHandler(filters.TEXT, chat.conversation_handler.init))
