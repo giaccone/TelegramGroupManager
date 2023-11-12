@@ -17,7 +17,11 @@ async def func(update, context):
     if context.user_data[query.from_user.id] == context.chat_data[query.message.message_id]['question_key']:
         # if answer is correct send welcome message
         if int(query.data) == context.chat_data[query.message.message_id]['answer']:
-            # delet captcha
+            # calcel timeout ban
+            job = context.chat_data[query.message.message_id]['job']
+            job.schedule_removal()
+
+            # delete captcha
             await context.bot.delete_message(query.message.chat_id, query.message.message_id)
             
             # unmute member
@@ -43,7 +47,6 @@ async def func(update, context):
 
                 await context.bot.send_message(chat_id=config.group['pixel']['id'],
                                             text=welcome_text.format(member_name, query.message.chat.title),
-                                            message_thread_id=config.group['pixel']['main_topic'],
                                             reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
             elif query.message.chat.id == config.group['macos']['id']:
@@ -105,6 +108,9 @@ async def func(update, context):
         
         # if answer is wrong kick user
         else:
+            # calcel timeout ban
+            job = context.chat_data[query.message.message_id]['job']
+            job.schedule_removal()
             # delet captcha
             await context.bot.delete_message(query.message.chat_id, query.message.message_id)
 

@@ -85,12 +85,32 @@ async def func(update, context):
                                            text=question_text.format(member_name, x, y),
                                            reply_markup=reply_markup, parse_mode=ParseMode.HTML)
         
+        
+        # set delayed ban for users that do not respond to the captcha after a given delay
+        async def delayed_ban(context, update=update, msg=msg):
+            # ban
+            await context.bot.ban_chat_member(chat_id=update.chat_member.chat.id,
+                                             user_id=update.chat_member.new_chat_member.user.id)
+            # clean chat
+            await context.bot.delete_message(chat_id=update.chat_member.chat.id,
+                                            message_id=msg.message_id)
+            # log CAPTCHA sent
+            logger.info("action: ban. id: %s - name: %s - chat: %s - chat id: %s - reason: CAPTCHA timeout",
+                        update.chat_member.new_chat_member.user.id,
+                        update.chat_member.new_chat_member.user.name,
+                        update.chat_member.chat.title,
+                        update.chat_member.chat.id)
+
+        seconds = 600  # 10 minutes
+        job = context.job_queue.run_once(delayed_ban, seconds)
+        
         # generate a random key
         key = str(uuid.uuid4())
         # bind InlineKeyboard to user by means of chat_data and user_data
         context.chat_data[msg.message_id] = dict()
         context.chat_data[msg.message_id]['question_key'] = key
         context.chat_data[msg.message_id]['answer'] = x_plus_y
+        context.chat_data[msg.message_id]['job'] = job
         context.user_data[update.chat_member.new_chat_member.user.id] = key
         
         # log CAPTCHA sent
