@@ -1,3 +1,4 @@
-__all__ = ["decorator"]
+__all__ = ["decorator", "common"]
 
+from . import decorator, common
 from util import *
