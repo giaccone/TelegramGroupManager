@@ -45,9 +45,17 @@ async def func(update, context):
                     [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
-                await context.bot.send_message(chat_id=config.group['pixel']['id'],
+                msg = await context.bot.send_message(chat_id=config.group['pixel']['id'],
                                             text=welcome_text.format(member_name, query.message.chat.title),
                                             reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+                
+                async def delayed_delete(context, chat_id=config.group['pixel']['id'], msg=msg):
+                    # clean chat
+                    await context.bot.delete_message(chat_id=chat_id,
+                                                    message_id=msg.message_id)
+                
+                seconds = 300  # 5 minutes
+                job = context.job_queue.run_once(delayed_delete, seconds)
             
             elif query.message.chat.id == config.group['macos']['id']:
                 
@@ -105,6 +113,14 @@ async def func(update, context):
                     query.from_user.name,
                     query.message.chat.id,
                     query.message.chat.title)
+            
+            # send new unrestricted user info in log chat
+            await context.bot.send_message(chat_id=config.group['log']['id'],
+                                            text="<b>NEW USER.</b>\n * id: {}\n * name: {}\n * chat: {}\n * chat id: {}".format(query.from_user.id,
+                                                                                                               query.from_user.name,
+                                                                                                               query.message.chat.id,
+                                                                                                               query.message.chat.title),
+                                            parse_mode=ParseMode.HTML)
         
         # if answer is wrong kick user
         else:
