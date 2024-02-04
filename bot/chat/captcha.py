@@ -124,8 +124,11 @@ async def func(update, context):
     # hndle user who leave the group
     elif was_member and not is_member:
         await context.bot.send_message(chat_id=config.group['log']['id'],
-                                      text=f"{member_name} ha lasciato il gruppo {update.chat_member.chat.title}",
-                                      parse_mode=ParseMode.HTML)
+                                       text="<b>LOST USER:</b>\n * id: {}\n * name: {}\n * chat id: {}\n * chat: {}".format(update.chat_member.new_chat_member.user.id,
+                                                                                                                            update.chat_member.new_chat_member.user.name,
+                                                                                                                            update.chat_member.chat.id,
+                                                                                                                            update.chat_member.chat.title),
+                                       parse_mode=ParseMode.HTML)
 
         logger.info("LOST USER. id: %s - name: %s - chat: %s - chat id: %s",
                         update.chat_member.new_chat_member.user.id,

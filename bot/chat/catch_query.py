@@ -46,16 +46,8 @@ async def func(update, context):
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
                 msg = await context.bot.send_message(chat_id=config.group['pixel']['id'],
-                                            text=welcome_text.format(member_name, query.message.chat.title),
-                                            reply_markup=reply_markup, parse_mode=ParseMode.HTML)
-                
-                async def delayed_delete(context, chat_id=config.group['pixel']['id'], msg=msg):
-                    # clean chat
-                    await context.bot.delete_message(chat_id=chat_id,
-                                                    message_id=msg.message_id)
-                
-                seconds = 300  # 5 minutes
-                job = context.job_queue.run_once(delayed_delete, seconds)
+                                                     text=welcome_text.format(member_name, query.message.chat.title),
+                                                     reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
             elif query.message.chat.id == config.group['macos']['id']:
                 
@@ -65,9 +57,9 @@ async def func(update, context):
                     [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
-                await context.bot.send_message(chat_id=config.group['macos']['id'],
-                                                text=welcome_text.format(member_name, query.message.chat.title),
-                                                reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+                msg = await context.bot.send_message(chat_id=config.group['macos']['id'],
+                                                     text=welcome_text.format(member_name, query.message.chat.title),
+                                                     reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
             elif query.message.chat.id == config.group['foss']['id']:
                 
@@ -77,9 +69,9 @@ async def func(update, context):
                     [InlineKeyboardButton("macOS Italia", url='https://t.me/macOSItalia')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
-                await context.bot.send_message(chat_id=config.group['foss']['id'],
-                                            text=welcome_text.format(member_name, query.message.chat.title),
-                                            reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+                msg = await context.bot.send_message(chat_id=config.group['foss']['id'],
+                                                     text=welcome_text.format(member_name, query.message.chat.title),
+                                                     reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
             elif (query.message.chat.id == config.group['modding']['id']) or (query.message.chat.id == config.group['watch']['id']):
 
@@ -89,9 +81,21 @@ async def func(update, context):
                     [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
 
-                await context.bot.send_message(chat_id=query.message.chat.id,
-                                            text=welcome_inactive.format(member_name),
-                                            reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+                msg = await context.bot.send_message(chat_id=query.message.chat.id,
+                                                     text=welcome_inactive.format(member_name),
+                                                     reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+            
+            # check if the group uses privacy mode
+            if query.message.chat.id in config.enabled_privacy_group:
+                
+                async def delayed_delete(context, chat_id=query.message.chat.id, msg=msg):
+                    # clean chat
+                    await context.bot.delete_message(chat_id=chat_id,
+                                                    message_id=msg.message_id)
+                
+                # delet welcome message after a given time to preserve privacy (hopefully limiting spam)
+                job = context.job_queue.run_once(delayed_delete, config.delete_after*3600)
+
 
             else:
                 
@@ -108,7 +112,7 @@ async def func(update, context):
 
 
             # log new unrestricted user
-            logger.info("NEW USER. id: %s - name: %s - chat: %s - chat id: %s",
+            logger.info("NEW USER. id: %s - name: %s - chat id: %s - chat: %s",
                     query.from_user.id,
                     query.from_user.name,
                     query.message.chat.id,
