@@ -5,6 +5,7 @@ from telegram import ChatMember, ChatPermissions
 from random import randint, sample, shuffle
 import logging
 import uuid
+import asyncio
 
 # setup logger
 logger = logging.getLogger(__name__)
@@ -86,16 +87,19 @@ async def func(update, context):
                                            reply_markup=reply_markup, parse_mode=ParseMode.HTML)
         
         
-        # set delayed ban for users that do not respond to the captcha after a given delay
+        # set delayed kick for users that do not respond to the captcha after a given delay
         async def delayed_ban(context, update=update, msg=msg):
-            # ban
+            # kick
             await context.bot.ban_chat_member(chat_id=update.chat_member.chat.id,
-                                             user_id=update.chat_member.new_chat_member.user.id)
+                                              user_id=update.chat_member.new_chat_member.user.id)
+            await asyncio.sleep(2)
+            await context.bot.unban_chat_member(chat_id=update.chat_member.chat.id,
+                                                user_id=update.chat_member.new_chat_member.user.id)
             # clean chat
             await context.bot.delete_message(chat_id=update.chat_member.chat.id,
                                             message_id=msg.message_id)
             # log CAPTCHA sent
-            logger.info("action: ban. id: %s - name: %s - chat: %s - chat id: %s - reason: CAPTCHA timeout",
+            logger.info("action: kick. id: %s - name: %s - chat: %s - chat id: %s - reason: CAPTCHA timeout",
                         update.chat_member.new_chat_member.user.id,
                         update.chat_member.new_chat_member.user.name,
                         update.chat_member.chat.title,
