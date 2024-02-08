@@ -85,6 +85,19 @@ async def func(update, context):
                                                      text=welcome_inactive.format(member_name),
                                                      reply_markup=reply_markup, parse_mode=ParseMode.HTML)
             
+            else:
+                
+                keyboard = [
+                    [InlineKeyboardButton("Somme Regole 📜", url='https://telegra.ph/Google-Pixel-Italia-07-29')],
+                    [InlineKeyboardButton("Google Pixel Italia", url='https://t.me/googlepixelit')],
+                    [InlineKeyboardButton("macOS Italia", url='https://t.me/macOSItalia')],
+                    [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
+                reply_markup = InlineKeyboardMarkup(keyboard)
+
+                msg = await context.bot.send_message(chat_id=query.message.chat.id,
+                                            text=welcome_text.format(member_name, query.message.chat.title),
+                                            reply_markup=reply_markup, parse_mode=ParseMode.HTML)
+
             # check if the group uses privacy mode
             if query.message.chat.id in config.enabled_privacy_group:
                 
@@ -95,21 +108,6 @@ async def func(update, context):
                 
                 # delet welcome message after a given time to preserve privacy (hopefully limiting spam)
                 job = context.job_queue.run_once(delayed_delete, config.delete_after*3600)
-
-
-            else:
-                
-                keyboard = [
-                    [InlineKeyboardButton("Somme Regole 📜", url='https://telegra.ph/Google-Pixel-Italia-07-29')],
-                    [InlineKeyboardButton("Google Pixel Italia", url='https://t.me/googlepixelit')],
-                    [InlineKeyboardButton("macOS Italia", url='https://t.me/macOSItalia')],
-                    [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
-                reply_markup = InlineKeyboardMarkup(keyboard)
-
-                await context.bot.send_message(chat_id=query.message.chat.id,
-                                            text=welcome_text.format(member_name, query.message.chat.title),
-                                            reply_markup=reply_markup, parse_mode=ParseMode.HTML)
-
 
             # log new unrestricted user
             logger.info("NEW USER. id: %s - name: %s - chat id: %s - chat: %s",
