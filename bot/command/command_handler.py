@@ -12,6 +12,7 @@ def admin_command(application):
     application.add_handler(CommandHandler("log", command.admin.log.func))
     application.add_handler(CommandHandler("mute", command.admin.mute.func))
     application.add_handler(CommandHandler("pin", command.admin.pin.func))
+    application.add_handler(CommandHandler("say", command.admin.say.func))
     application.add_handler(CommandHandler("slow", command.admin.slow.func))
     application.add_handler(CommandHandler("unban", command.admin.unban.func))
     application.add_handler(CommandHandler("unmute", command.admin.unmute.func))
