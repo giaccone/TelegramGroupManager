@@ -8,6 +8,9 @@ from telegram.constants import ParseMode
 # setup logger
 logger = logging.getLogger(__name__)
 
+# url regole
+url_regole = "https://telegra.ph/Regolamento-Gruppi-del-network-02-26"
+
 async def func(update, context):
 
     # get query
@@ -40,7 +43,7 @@ async def func(update, context):
             if query.message.chat.id == config.group['pixel']['id']:
                 
                 keyboard = [
-                    [InlineKeyboardButton("Somme Regole 📜", url='https://telegra.ph/Google-Pixel-Italia-07-29')],
+                    [InlineKeyboardButton("Somme Regole 📜", url=url_regole)],
                     [InlineKeyboardButton("macOS Italia", url='https://t.me/macOSItalia')],
                     [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
@@ -52,7 +55,7 @@ async def func(update, context):
             elif query.message.chat.id == config.group['macos']['id']:
                 
                 keyboard = [
-                    [InlineKeyboardButton("Somme Regole 📜", url='https://telegra.ph/Google-Pixel-Italia-07-29')],
+                    [InlineKeyboardButton("Somme Regole 📜", url=url_regole)],
                     [InlineKeyboardButton("Google Pixel Italia", url='https://t.me/googlepixelit')],
                     [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
@@ -64,7 +67,7 @@ async def func(update, context):
             elif query.message.chat.id == config.group['foss']['id']:
                 
                 keyboard = [
-                    [InlineKeyboardButton("Somme Regole 📜", url='https://telegra.ph/Google-Pixel-Italia-07-29')],
+                    [InlineKeyboardButton("Somme Regole 📜", url=url_regole)],
                     [InlineKeyboardButton("Google Pixel Italia", url='https://t.me/googlepixelit')],
                     [InlineKeyboardButton("macOS Italia", url='https://t.me/macOSItalia')]]
                 reply_markup = InlineKeyboardMarkup(keyboard)
@@ -88,7 +91,7 @@ async def func(update, context):
             else:
                 
                 keyboard = [
-                    [InlineKeyboardButton("Somme Regole 📜", url='https://telegra.ph/Google-Pixel-Italia-07-29')],
+                    [InlineKeyboardButton("Somme Regole 📜", url=url_regole)],
                     [InlineKeyboardButton("Google Pixel Italia", url='https://t.me/googlepixelit')],
                     [InlineKeyboardButton("macOS Italia", url='https://t.me/macOSItalia')],
                     [InlineKeyboardButton("FOSS Italia", url='https://t.me/fossitaly')]]
