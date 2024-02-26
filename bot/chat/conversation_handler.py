@@ -39,7 +39,7 @@ async def market_words(update, context):
                                                      "all'interno del gruppo @googlepixelit .\n\n"
                                                      'Per postare un annucio abbiamo un bot dedicato: @aospitaliashopbot\n\n'
                                                      'N.B. e comunque eventuali trattative vanno gestite in privato!'.format(update.message.from_user.id, update.message.from_user.first_name),
-                                                reply_to_message_id=update.message.message_id, parse_mode=ParseMode.HTML,
+                                                reply_parameters=update.message, parse_mode=ParseMode.HTML,
                                                 disable_web_page_preview=True)
 
 # slow mode
