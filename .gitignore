@@ -1,4 +1,7 @@
+.vscode
 .DS_Store
 __pycache__
 *.log
 *.ini
+warning_list.txt
+warning-database.db
