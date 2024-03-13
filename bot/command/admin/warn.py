@@ -56,7 +56,7 @@ async def func(update, context):
         counter = update_user(conn, user_id, chat_id, +1)
         if counter == 3:
             # set and send message to the user
-            msg = f"<b>User</b>: @{username}\n" \
+            msg = f"<b>User</b>: {update.message.reply_to_message.from_user.mention_html()}\n" \
                   f"<b>Warn 3/3</b>.\n" \
                   f"<b>Motivo</b>: {reason}.\n\n" \
                   f"Limite raggiunto, sarai bannato dal gruppo fra 60 secondi."
@@ -92,7 +92,7 @@ async def func(update, context):
             context.job_queue.run_once(delayed_ban, seconds)
         else:
             # set and send message to the user
-            msg = f"<b>User</b>: @{username}\n" \
+            msg = f"<b>User</b>: @{update.message.reply_to_message.from_user.mention_html()}\n" \
                   f"<b>Warn {counter}/3</b>.\n" \
                   f"<b>Motivo</b>: {reason}.\n\n" \
                   f"(attenzione, tre warn = ban)"
@@ -124,7 +124,7 @@ async def func(update, context):
         counter = add_user(conn, user_id, username, name, chat_id, chat_title)
 
         # set and send message to the user
-        msg = f"<b>User</b>: @{username}\n" \
+        msg = f"<b>User</b>: @{update.message.reply_to_message.from_user.mention_html()}\n" \
               f"<b>Warn {counter}/3</b>.\n" \
               f"<b>Motivo</b>: {reason}.\n\n" \
               f"(attenzione, tre warn = ban)"
