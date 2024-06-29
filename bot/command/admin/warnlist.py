@@ -1,4 +1,5 @@
 # import modules
+import os
 import sqlite3
 import logging
 from util.decorator import restricted
@@ -17,18 +18,22 @@ async def func(update, context):
     The bot sends a txt file including all users in the warn_database for the given chat.
     """
 
+    # get absolute path of the database
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = path[:path.index("/command")]
+    database = path + '/warning-database.db'
     # open database
-    database = 'warning-database.db'
     conn = sqlite3.connect(database)
+    # get cursor
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM warning_list WHERE :chat_id", {"chat_id":update.message.chat_id})
     
-    with open('warning_list.txt', 'w') as file:
+    with open(path + '/warning_list.txt', 'w') as file:
         for k, ele in enumerate(cursor.fetchall()):
             file.write("{}) user_id: {}, username: {}, name: {}, chat_id: {}, chat_title: {}, warn_count: {}\n".format(k + 1, *ele))
     
     # # send file
-    await context.bot.send_document(chat_id=update.message.from_user.id, document=open('warning_list.txt', 'rb'))
+    await context.bot.send_document(chat_id=update.message.from_user.id, document=open(path + '/warning_list.txt', 'rb'))
 
     # clean chat
     await context.bot.delete_message(update.message.chat_id, update.message.message_id)
