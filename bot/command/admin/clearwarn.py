@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import logging
 from util.decorator import restricted
@@ -7,8 +8,11 @@ from util.database_functions import isin, remove_user
 # setup logger
 logger = logging.getLogger(__name__)
 
+# get absolute path of the database
+path = os.path.dirname(os.path.abspath(__file__))
+path = path[:path.index("/command")]
+database = path + '/warning-database.db'
 # open database
-database = 'warning-database.db'
 conn = sqlite3.connect(database)
 # get cursor
 cursor = conn.cursor()
