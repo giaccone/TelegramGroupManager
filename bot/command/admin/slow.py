@@ -1,4 +1,5 @@
 # import modules
+import os
 from configparser import ConfigParser
 from util.decorator import restricted
 
@@ -22,7 +23,9 @@ async def func(update, context):
         /slow -ls      # shows settings applied
     """
 
-    
+    # get absolute path of the bot
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = path[:path.index("/command")]
 
     # decode command
     msg = context.args
@@ -34,7 +37,7 @@ async def func(update, context):
         seconds = '30'
     elif len(msg) == 1:   # case: /slow flag
         if msg[0] == '-ls':
-            text = read_file('slowmode.ini', update.message.chat_id, update.message.chat.title)
+            text = read_file(path + '/slowmode.ini', update.message.chat_id, update.message.chat.title)
             await update.message.reply_text(text=text, parse_mode = 'HTML')
             await context.bot.delete_message(update.message.chat_id, update.message.message_id)
             return
@@ -53,7 +56,7 @@ async def func(update, context):
 
     # read 'slowmode.ini'
     slowmode_cnf = ConfigParser()
-    slowmode_cnf.read('slowmode.ini')
+    slowmode_cnf.read(path + '/slowmode.ini')
 
     # update 'slowmode.ini'
     if str(update.message.chat_id) in slowmode_cnf:   # the group already has an entry for slowmode
@@ -64,7 +67,7 @@ async def func(update, context):
         slowmode_cnf[str(update.message.chat_id)] = {'active': active, 'msg_num': msg_num, 'seconds': seconds}
 
     # save updated config
-    with open('slowmode.ini', 'w') as file:
+    with open(path + '/slowmode.ini', 'w') as file:
         slowmode_cnf.write(file)
 
     # delete previous config

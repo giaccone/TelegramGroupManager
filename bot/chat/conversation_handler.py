@@ -1,3 +1,4 @@
+import os
 from telegram.constants import ParseMode
 from telegram import ChatPermissions
 from telegram.error import Forbidden
@@ -50,15 +51,19 @@ async def slowmode_check(update, context):
         if 'slowmode_cnf' in context.bot_data:
             slowmode_cnf = context.bot_data['slowmode_cnf']
         else:  # otherwise read config from file
+            # get absolute path of the bot
+            path = os.path.dirname(os.path.abspath(__file__))
+            path = path[:path.index("/chat")]
+            # read 'slowmode.ini'
             slowmode_cnf = ConfigParser()
-            slowmode_cnf.read('slowmode.ini')
+            slowmode_cnf.read(path + '/slowmode.ini')
 
         # check if this chat has available config, otherwise set defaults (to inactive)
         if str(update.message.chat_id) not in slowmode_cnf:
             slowmode_cnf[str(update.message.chat_id)] = {'active': '0', 'msg_num': '3', 'seconds': '30'}
 
         # update slowmode.ini
-        with open('slowmode.ini', 'w') as file:
+        with open(path + '/slowmode.ini', 'w') as file:
             slowmode_cnf.write(file)
 
         # update bot_data
