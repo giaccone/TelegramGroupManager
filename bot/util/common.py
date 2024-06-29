@@ -1,5 +1,11 @@
+import os
+
 def id_by_username(username):
-    with open('Nika.log', 'r') as file:
+    # get absolute path of the database
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = path[:path.index("/util")]
+
+    with open(path + '/Nika.log', 'r') as file:
         for line in file:
             if "CAPTCHA sent" in line:
                 if username == line.split("- name:")[1].split("-")[0].strip():

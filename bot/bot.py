@@ -1,4 +1,5 @@
 # PTB modules
+import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, CallbackQueryHandler
 from telegram.ext import ChatMemberHandler
@@ -14,7 +15,9 @@ import logging
 
 # set basic logging
 # -----------------
-logging.basicConfig(filename='Nika.log',
+# get absolute path of the bot
+path = os.path.dirname(os.path.abspath(__file__))
+logging.basicConfig(filename=path + '/Nika.log',
                     encoding='utf-8',
                     level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
