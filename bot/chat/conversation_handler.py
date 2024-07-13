@@ -45,15 +45,15 @@ async def market_words(update, context):
 
 # slow mode
 async def slowmode_check(update, context):
+    # get absolute path of the bot
+    path = os.path.dirname(os.path.abspath(__file__))
+    path = path[:path.index("/chat")]
     # restrict to real messages (not None) and groups (chat_id < 1)
     if (update.message is not None) and (update.message.chat_id < 1):
         # check if config is already in bot_data
         if 'slowmode_cnf' in context.bot_data:
             slowmode_cnf = context.bot_data['slowmode_cnf']
         else:  # otherwise read config from file
-            # get absolute path of the bot
-            path = os.path.dirname(os.path.abspath(__file__))
-            path = path[:path.index("/chat")]
             # read 'slowmode.ini'
             slowmode_cnf = ConfigParser()
             slowmode_cnf.read(path + '/slowmode.ini')
