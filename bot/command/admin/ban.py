@@ -2,6 +2,7 @@ from util.decorator import restricted
 from telegram.error import BadRequest
 from util.common import id_by_username
 import logging
+from telegram.constants import ParseMode
 
 # setup logger
 logger = logging.getLogger(__name__)
@@ -82,5 +83,31 @@ async def func(update, context):
 
     # clean chat
     await context.bot.delete_message(chat_id, update.message.message_id)
+
+    # notify action in chat
+    notification_message = "<b>Utente bannato con successo:</b>" \
+                           " - User_id: {}" \
+                           " - Name: {}" \
+                           " - Username: @{}" \
+                           " - ban reason: {}".format(user_id,
+                                                     first_name,
+                                                     username,
+                                                     text)
+                            
+    msg = await context.bot.send_message(chat_id=update.message.chat_id,
+                                         text=notification_message,
+                                         parse_mode=ParseMode.HTML,
+                                         disable_web_page_preview=True)
+    
+
+    # set delayed action
+    async def delayed_clean(context, update=update, msg=msg):
+        await context.bot.delete_message(chat_id=update.message.chat.id,
+                                         message_id=msg.message_id)
+        
+    
+    # schedule action
+    seconds = 120
+    context.job_queue.run_once(delayed_clean, seconds)
     
     
