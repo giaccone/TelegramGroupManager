@@ -12,6 +12,9 @@ group = {'admin': {'id': -100123456789},
 enabled_privacy_group = [-100123456789]
 delete_after = 10 # hours
 
+# link
+url_rules = "www.put-the-link-to-the-rules-here.com" 
+
 allowed_group = []
 for item in group.items():
     allowed_group.append(item[1]['id'])
